@@ -38,7 +38,7 @@ class PostController {
     postcreat = async (req, res,) => {
         try {
             const { title, content } = req.body;
-            const UserId = 1;
+            const UserId = 1;                                   //UserId 임시 부여 => 주의 사항으로 User 테이블내에 pk인 id가 1인 값이 무조건 있어야 생성가능
             PostService.postcreat(title, content, UserId);
 
             return res.status(200).json({message:"성공"});
