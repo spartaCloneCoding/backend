@@ -7,5 +7,8 @@ const commentController = new CommentController
 
 router.get("/:postId", commentController.commentGet)
 router.post("/:postId", commentController.commentCreate)
+router.patch("/:commentId", commentController.commentUpdate)
+router.delete("/:commentId", commentController.commentDelete)
+
 
 export default router;

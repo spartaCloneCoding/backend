@@ -15,7 +15,32 @@ export default class CommentService{
             UserId,
             PostId,
         );
+
         return {commentCreate}
     };
+    
+    commentUpdate = async(comment, commentId) => {
+        const commentUpdate = await this.CommentRepository.commentUpdate(
+            comment,
+            commentId
+        );
+
+        return commentUpdate;
+    };
+
+    commentDelete = async(commentId) => {
+        // const findId = await this.CommentRepository.commentGet({ where : {id: commentId}})
+        // console.log(findId)
+        // if(findId == []){
+        //     return res.json({
+        //         success: false
+        //     })
+        // }
+        const commentDelete = await this.CommentRepository.commentDelete(
+            commentId,
+        )
+
+        return commentDelete;
+    }
 };
 
