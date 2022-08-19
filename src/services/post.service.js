@@ -12,31 +12,53 @@ class PostService {
     postview = async () => {
         const list = await Postrepositories.postview();
 
+        if(!list.length){
+            return false;
+        }
+
         return list;
     };
 
     postviewdetail = async (postId) => {
         const post = await Postrepositories.postviewdetail(postId);
-   
+
+        if(post === null){
+            return false;
+        }
+
         return post;
     };
 
     postcreat = async (title, content, UserId) => {
-        Postrepositories.postcreat(title, content, UserId);
+        if(title === "" || content === ""){
+            return true
+        }
 
-        return;
+        await Postrepositories.postcreat(title, content, UserId);
+
+        return false;
     };
 
     postupdate = async (title, content, postId) => {
+        const post = await Postrepositories.postviewdetail(postId);
+
+        if(post === null){
+            return true
+        }
         Postrepositories.postupdate(title, content, postId);
 
-        return;
+        return false;
     };
 
     postdelete = async (postId) => {
+        const post = await Postrepositories.postviewdetail(postId);
+
+        if(post === null){
+            return true
+        }
         Postrepositories.postdelete(postId)
 
-        return;
+        return false;
     };
 }
 
