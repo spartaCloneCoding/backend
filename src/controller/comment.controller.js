@@ -26,15 +26,26 @@ export default class CommentController {
     };
 
     commentCreate = async (req, res, next) => {
-        const { userId } = res.locals;
+        const userId = res.locals.userId;
         const postId = req.params.postId;
         const comment = req.body.comment;
+
         try {
             const commentCreate = await this.commentService.commentCreate(
                 comment,
                 userId,
                 postId
             );
+
+            const commentOwner = commentCreate.commentCreate.UserId
+
+            if(userId !== commentOwner){
+                return res.status(400).json({
+                    success: false,
+                    message: "본인의 댓글이 아닙니다"
+                })
+            }
+
             if (comment.length !== 0) {
                 return res.status(201).json({
                     success: true,
@@ -43,7 +54,7 @@ export default class CommentController {
             } else {
                 return res.status(400).json({
                     success: false,
-                    message: "작성 실패",
+                    message: "댓글을 입력해주세요",
                 });
             }
         } catch (error) {
@@ -52,7 +63,7 @@ export default class CommentController {
     };
 
     commentUpdate = async (req, res, next) => {
-        const { userId } = res.locals;
+        const userId = res.locals.userId;
         const commentId = req.params.commentId;
         const comment = req.body.comment;
         try {
@@ -63,6 +74,18 @@ export default class CommentController {
                     message: "존재하지않는 댓글",
                 });
 
+            }
+            if(userId !== findId.UserId){
+                return res.status(400).json({
+                    success: false,
+                    message: "본인의 글만 수정할 수 있습니다"
+                })
+            }
+            if(comment.length === 0){
+                return res.status(400).json({
+                    success: false,
+                    message: "댓글을 입력해주세요"
+                })
             }
 
             const commentUpdate = await this.commentService.commentUpdate(
@@ -82,6 +105,8 @@ export default class CommentController {
 
     commentDelete = async (req, res, next) => {
         const commentId = req.params.commentId;
+        const userId = res.locals.userId;
+        console.log(userId)
 
         try {
             const findId = await Comment.findOne({ where: { id: commentId } });
@@ -91,6 +116,13 @@ export default class CommentController {
                     message: "존재하지않는 댓글",
                 });
 
+            }
+            console.log(findId.UserId)
+            if(userId !== findId.UserId){
+                return res.status(400).json({
+                    success : false,
+                    message : "본인의 댓글만 삭제가능합니다"
+                })
             }
 
             const commentDelete = await this.commentService.commentDelete(

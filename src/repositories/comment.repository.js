@@ -15,7 +15,6 @@ export default class CommentRepository {
         };
 
         commentCreate = async(comment, UserId, PostId) => {
-            // 와 시발 이거 순서 안맞췃네
             const commentCreate = await Comment.create({
                 comment,
                 UserId,
