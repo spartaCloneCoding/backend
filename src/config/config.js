@@ -6,7 +6,7 @@ const config = {
     development: {
         username: process.env.DB_ID,
         password: process.env.DB_PW,
-        database: "spartacode",
+        database: process.env.DB,
         host: process.env.DB_HOST,
         dialect: "mysql",
         logging: false,

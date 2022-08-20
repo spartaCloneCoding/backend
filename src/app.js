@@ -4,11 +4,12 @@ import cors from "cors";
 import router from "./routes/index.js";
 import session from "express-session";
 import MySQLStore from "express-mysql-session";
+
+dotenv.config();
+
 import { sequelize } from "./models/index.js";
 
 MySQLStore(session);
-
-dotenv.config();
 
 const app = express();
 

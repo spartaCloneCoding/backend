@@ -1,9 +1,12 @@
-const authMiddleware = (req, res, next) => {
+import User from "../models/user.js";
+
+const authMiddleware = async (req, res, next) => {
     try {
         const { email } = req.session;
         if (email !== undefined) {
-            res.locals.email = email;
-            // 닉네임 추가
+            const userInfo = await User.findOne({ where: { email } });
+            res.locals.userId = userInfo.id;
+            res.locals.nickname = userInfo.nickname;
             next();
         } else {
             res.status(400).json({
