@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import router from "./routes/index.js";
+import io from "socket.io"
 dotenv.config();
 
 import { sequelize } from "./models/index.js";
@@ -10,8 +11,7 @@ const app = express();
 
 app.set("port", process.env.PORT || 3000);
 sequelize
-    .sync()
-    // .sync({ force: true })
+    .sync({ force: false })
     .then(() => console.log("db connect"))
     .catch((err) => console.error(err));
 
