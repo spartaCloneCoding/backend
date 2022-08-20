@@ -20,6 +20,4 @@ User.associate(db);
 Post.associate(db);
 Comment.associate(db);
 
-export {
-  db,
-};
+export { db };
