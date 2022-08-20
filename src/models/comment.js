@@ -8,7 +8,7 @@ export default class Comment extends Sequelize.Model {
             {
                 comment: {
                     type: Sequelize.STRING(100),
-                    allowNull: true,
+                    allowNull: false,
                 },
             },
             {
