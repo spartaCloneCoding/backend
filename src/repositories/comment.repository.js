@@ -40,4 +40,12 @@ export default class CommentRepository {
 
             return commentDelete;
         }
+
+        // commentfindOne = async(commentId) => {
+        //     const commentfind = await Comment.findeOne({
+        //         where: {id: commentId}
+        //     })
+
+        //     return commentfind
+        // }
 };

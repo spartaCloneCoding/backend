@@ -1,5 +1,6 @@
 import  CommentRepository from "../repositories/comment.repository.js";
 
+
 export default class CommentService{
     CommentRepository = new CommentRepository();
 
@@ -29,13 +30,6 @@ export default class CommentService{
     };
 
     commentDelete = async(commentId) => {
-        // const findId = await this.CommentRepository.commentGet({ where : {id: commentId}})
-        // console.log(findId)
-        // if(findId == []){
-        //     return res.json({
-        //         success: false
-        //     })
-        // }
         const commentDelete = await this.CommentRepository.commentDelete(
             commentId,
         )
