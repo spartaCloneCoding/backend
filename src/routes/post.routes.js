@@ -9,5 +9,8 @@ router.post("/", authMiddleware, PostController.postcreat); //커뮤니티 작�
 router.get("/:postId", PostController.postviewdetail); //게시판 상세보기
 router.patch("/:postId", authMiddleware, PostController.postupdate); //커뮤니티 수정
 router.delete("/:postId", authMiddleware, PostController.postdelete); //커뮤니티 삭제
+router.post("/like/:postId", authMiddleware, PostController.postLike);
+router.delete("/like/:postId", authMiddleware, PostController.postLikeDelete);
+router.get("/like/:postId", PostController.postLikeNum);
 
 export default router;
