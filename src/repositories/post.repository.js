@@ -1,5 +1,6 @@
 import Post from "../models/post.js";
 import User from "../models/user.js";
+import Like from "../models/like.js";
 
 class Postrepositories {
     // 만들어야 할꺼
@@ -50,6 +51,24 @@ class Postrepositories {
 
         return;
     };
+
+    postLike = async(postId, userId) => {
+        const likeCreate = await Like.create({
+            PostId : postId,
+            UserId : userId,
+            like : true,
+        })
+
+        return likeCreate;
+    }
+
+    postLikeDelete = async(postId, userId) => {
+        const LikeDelete = await Like.destroy({
+            where : {PostId: postId, UserId : userId}
+        });
+
+        return LikeDelete
+    }
 }
 
 export default new Postrepositories;

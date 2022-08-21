@@ -1,4 +1,5 @@
 import PostService from "../services/post.service.js";
+import Like from "../models/like.js";
 
 class PostController {
     // 만들어야 할꺼
@@ -98,6 +99,76 @@ class PostController {
             return res.status(400).json(err);
         }
     };
+
+    // 좋아요 주석 : 좋아요는 로그인만 하면 누구나 가능
+    postLike = async (req, res, next) => {
+        const postId = req.params.postId;
+        const userId = res.locals.userId;
+        // console.log(userId)
+
+        try {
+            const findLike = await Like.findOne({ where : {PostId : postId, UserId : userId}})
+            // console.log(findLike.UserId)
+            if(findLike){
+                return res.status(400).json({
+                    success: false,
+                    message : "이미 좋아요 한 댓글입니다"
+                })
+            }
+
+            const postLike = await PostService.postLike(postId, userId);
+            return res.status(200).json({
+                success : true,
+                message : "좋아요 성공"
+            })
+        } catch(error) {
+            console.log(error)
+            return next(error)
+        }
+    }
+
+    postLikeDelete = async (req, res, next) => {
+        const postId = req.params.postId;
+        const userId = res.locals.userId;
+
+        try{
+            const findLike = await Like.findOne({ where : {PostId : postId, UserId : userId}})
+            console.log(findLike)
+
+            if(!findLike){
+                return res.status(400).json({
+                    success : false,
+                    message : "좋아요를 하여야만 취소할 수 있습니다"
+                })
+            }
+            const postLikeDelete = await PostService.postLikeDelete(postId, userId);
+            return res.status(200).json({
+                success : true,
+                message : '좋아요를 취소했습니다'
+            })
+        } catch (error) {
+            return next(error)
+        }
+    }
+
+    // 좋아요 개수 확인 조건 필요없음 0은 0임
+    postLikeNum = async (req, res, next) => {
+        const postId = req.params.postId;
+
+        try{
+            const findLikeNum = await Like.findAll({
+                where : {like : true, PostId : postId}
+            })
+            console.log(findLikeNum.length);
+            return res.status(200).json({
+                success : true,
+                message : "조회성공",
+                result : findLikeNum.length,
+            })
+        } catch(error){
+            return next(error)
+        }
+    }
 }
 
 export default new PostController();

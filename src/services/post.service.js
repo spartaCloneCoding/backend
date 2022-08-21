@@ -60,6 +60,18 @@ class PostService {
 
         return false;
     };
+
+    postLike = async (postId, userId) => {
+        const PostLike = await Postrepositories.postLike(postId, userId);
+
+        return PostLike;
+    }
+
+    postLikeDelete = async (postId, userId) => {
+        const postLikeDelete = await Postrepositories.postLikeDelete(postId, userId);
+
+        return postLikeDelete;
+    }
 }
 
 export default new PostService;
