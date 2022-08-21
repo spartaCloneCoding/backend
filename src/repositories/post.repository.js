@@ -1,4 +1,5 @@
 import Post from "../models/post.js";
+import Comment from "../models/comment.js";
 import User from "../models/user.js";
 import Like from "../models/like.js";
 

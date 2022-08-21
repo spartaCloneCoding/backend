@@ -31,15 +31,9 @@ export default class CommentController {
         const comment = req.body.comment;
 
         try {
-            const commentCreate = await this.commentService.commentCreate(
-                comment,
-                userId,
-                postId
-            );
+            const commentOwner = await Comment.findOne({where: {UserId : userId}})
 
-            const commentOwner = commentCreate.commentCreate.UserId
-
-            if(userId !== commentOwner){
+            if(userId !== commentOwner.UserId){
                 return res.status(400).json({
                     success: false,
                     message: "본인의 댓글이 아닙니다"
@@ -47,6 +41,11 @@ export default class CommentController {
             }
 
             if (comment.length !== 0) {
+                const commentCreate = await this.commentService.commentCreate(
+                    comment,
+                    userId,
+                    postId
+                );
                 return res.status(201).json({
                     success: true,
                     message: "작성 성공",
