@@ -2,29 +2,29 @@ import Sequelize from "sequelize";
 
 import { sequelize } from "./sequelize.js";
 
-export default class Comment extends Sequelize.Model {
+export default class Like extends Sequelize.Model {
     static init(sequelize) {
         return super.init(
             {
-                comment: {
-                    type: Sequelize.STRING(100),
-                    allowNull: false,
-                },
+               like : {
+                type : Sequelize.BOOLEAN,
+                allowNull : false,
+               }
             },
             {
                 sequelize,
-                timestamps: true,
+                timestamps: false,
                 paranoid: false, //
                 underscored: false, // created_at
-                modelName: "Comment",
-                tableName: "comment",
+                modelName: "Like",
+                tableName: "like",
                 charset: "utf8",
                 collate: "utf8_general_ci",
             }
         );
     }
     static associate(db) {
-        db.Comment.belongsTo(db.User);
-        db.Comment.belongsTo(db.Post);
+        db.User.belongsToMany(db.Post, {through: 'Like'});
+        db.Post.belongsToMany(db.User, {through: 'Like'});
     }
 }

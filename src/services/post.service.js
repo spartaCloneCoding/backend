@@ -39,27 +39,57 @@ class PostService {
         return false;
     };
 
-    postupdate = async (title, content, postId) => {
+    postupdate = async (title, content, postId, UserId) => {
+        const user = await Postrepositories.finduser(UserId);
+        if(user === null){
+            return "not exist user";
+        }
+
         const post = await Postrepositories.postviewdetail(postId);
+
+        if(user.UserId !== post.UserId){
+            return "mismatched user"
+        }
+
+        if(post === null){
+            return false
+        }
+        Postrepositories.postupdate(title, content, postId, UserId);
+
+        return post;
+    };
+
+    postdelete = async (postId, UserId) => {
+        const user = await Postrepositories.finduser(UserId);
+        if(user === null){
+            return "not exist user";
+        }
+
+        const post = await Postrepositories.postviewdetail(postId);
+
+        if(user.UserId !== post.UserId){
+            return "mismatched user"
+        }
 
         if(post === null){
             return true
         }
-        Postrepositories.postupdate(title, content, postId);
+        Postrepositories.postdelete(postId, UserId)
 
         return false;
     };
 
-    postdelete = async (postId) => {
-        const post = await Postrepositories.postviewdetail(postId);
+    postLike = async (postId, userId) => {
+        const PostLike = await Postrepositories.postLike(postId, userId);
 
-        if(post === null){
-            return true
-        }
-        Postrepositories.postdelete(postId)
+        return PostLike;
+    }
 
-        return false;
-    };
+    postLikeDelete = async (postId, userId) => {
+        const postLikeDelete = await Postrepositories.postLikeDelete(postId, userId);
+
+        return postLikeDelete;
+    }
 }
 
 export default new PostService;
