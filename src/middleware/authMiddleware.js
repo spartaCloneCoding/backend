@@ -22,4 +22,40 @@ const authMiddleware = async (req, res, next) => {
     }
 };
 
-export default authMiddleware;
+const loginCheckMiddleware = async (req, res, next) => {
+    try {
+        const { email } = req.session;
+        if (email !== undefined) {
+            return res.status(400).json({
+                success: false,
+                message: "이미 로그인 되어있습니다.",
+            });
+        }
+        next();
+    } catch (error) {
+        res.status(400).josn({
+            success: false,
+            message: error,
+        });
+    }
+};
+
+const logoutCheckMiddleware = async (req, res, next) => {
+    try {
+        const { email } = req.session;
+        if (email === undefined) {
+            return res.status(400).json({
+                success: false,
+                message: "이미 로그아웃 되어있습니다.",
+            });
+        }
+        next();
+    } catch (error) {
+        res.status(400).josn({
+            success: false,
+            message: error,
+        });
+    }
+};
+
+export { authMiddleware, loginCheckMiddleware, logoutCheckMiddleware };

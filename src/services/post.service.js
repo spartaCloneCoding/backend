@@ -12,7 +12,7 @@ class PostService {
     postview = async () => {
         const list = await Postrepositories.postview();
 
-        if(!list.length){
+        if (!list.length) {
             return false;
         }
 
@@ -22,7 +22,7 @@ class PostService {
     postviewdetail = async (postId) => {
         const post = await Postrepositories.postviewdetail(postId);
 
-        if(post === null){
+        if (post === null) {
             return false;
         }
 
@@ -30,8 +30,8 @@ class PostService {
     };
 
     postcreat = async (title, content, UserId) => {
-        if(title === "" || content === ""){
-            return true
+        if (title === "" || content === "") {
+            return true;
         }
 
         await Postrepositories.postcreat(title, content, UserId);
@@ -39,24 +39,38 @@ class PostService {
         return false;
     };
 
-    postupdate = async (title, content, postId) => {
+    postupdate = async (title, content, postId, UserId) => {
+        const user = await Postrepositories.finduser(UserId);
+
         const post = await Postrepositories.postviewdetail(postId);
 
-        if(post === null){
-            return true
+        if (post === null) {
+            return post;
         }
-        Postrepositories.postupdate(title, content, postId);
 
-        return false;
+        if (user.id !== post.UserId) {
+            return "mismatched user";
+        }
+
+        Postrepositories.postupdate(title, content, postId, UserId);
+
+        return post;
     };
 
-    postdelete = async (postId) => {
+    postdelete = async (postId, UserId) => {
+        const user = await Postrepositories.finduser(UserId);
+
         const post = await Postrepositories.postviewdetail(postId);
 
-        if(post === null){
-            return true
+        if (post === null) {
+            return post;
         }
-        Postrepositories.postdelete(postId)
+
+        if (user.id !== post.UserId) {
+            return "mismatched user";
+        }
+
+        Postrepositories.postdelete(postId, UserId);
 
         return false;
     };
@@ -65,13 +79,16 @@ class PostService {
         const PostLike = await Postrepositories.postLike(postId, userId);
 
         return PostLike;
-    }
+    };
 
     postLikeDelete = async (postId, userId) => {
-        const postLikeDelete = await Postrepositories.postLikeDelete(postId, userId);
+        const postLikeDelete = await Postrepositories.postLikeDelete(
+            postId,
+            userId
+        );
 
         return postLikeDelete;
-    }
+    };
 }
 
-export default new PostService;
+export default new PostService();
