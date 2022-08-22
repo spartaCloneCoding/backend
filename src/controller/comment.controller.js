@@ -31,15 +31,6 @@ export default class CommentController {
         const comment = req.body.comment;
 
         try {
-            const commentOwner = await Comment.findOne({where: {UserId : userId}})
-
-            if(userId !== commentOwner.UserId){
-                return res.status(400).json({
-                    success: false,
-                    message: "본인의 댓글이 아닙니다"
-                })
-            }
-
             if (comment.length !== 0) {
                 const commentCreate = await this.commentService.commentCreate(
                     comment,

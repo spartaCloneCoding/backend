@@ -33,5 +33,6 @@ export default class Post extends Sequelize.Model {
             onUpdate: "cascade",
         });
         db.Post.belongsTo(db.User);
+        db.Post.hasMany(db.Like);
     }
 }
