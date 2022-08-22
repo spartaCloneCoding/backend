@@ -21,6 +21,7 @@ class Postrepositories {
     postview = async () => {
         const list = await Post.findAll({
             where: {},
+
             include: [
                 { model: User, attributes: ["nickname"] },
                 { model: Comment },
@@ -28,6 +29,7 @@ class Postrepositories {
             ],
             attributes: { exclude: ["nickname", "UserId"] },
             order: [["createdAt", "DESC"]],
+
         });
 
         return list;
