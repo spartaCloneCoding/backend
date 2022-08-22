@@ -1,7 +1,10 @@
 import express from "express";
 import UserController from "../controller/user.controller.js";
 import UserValidation from "../validation/user.validation.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import {
+    loginCheckMiddleware,
+    logoutCheckMiddleware,
+} from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 const userController = new UserController();
@@ -14,12 +17,12 @@ router.post("/email_check", userValidation.email_check);
 router.post("/nickname_check", userValidation.nickname_check);
 
 // 회원가입
-router.post("/join", userController.joinUser);
+router.post("/join", loginCheckMiddleware, userController.joinUser);
 
 // 로그인
-router.post("/login", userController.loginUser);
+router.post("/login", loginCheckMiddleware, userController.loginUser);
 
 // 로그아웃
-router.get("/logout", userController.logOutUser);
+router.get("/logout", logoutCheckMiddleware, userController.logOutUser);
 
 export default router;
