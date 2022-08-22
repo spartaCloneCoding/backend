@@ -14,16 +14,31 @@ class PostController {
     postview = async (req, res) => {
         try {
             const list = await PostService.postview();
+            let cmtNumBox = []
+            let likeNumBox = []
+            for(let i = 0; i < list.length; i++){
+                const cmtNum = list[i].Comments.length
+                // console.log(cmtNum)
+                cmtNumBox.push(cmtNum)
+            }
 
+            for(let i = 0; i < list.length; i++){
+                const likeNum = list[i].Likes.length
+                likeNumBox.push(likeNum)
+            }
+            
+            // console.log(cmtNumBox)
+            
             if (!list) {
                 return res.status(400).json({
                     success: false,
                     message: "게시글이 존재하지 않습니다",
                 });
             }
-
+            console.log(cmtNumBox)
+            console.log(likeNumBox)
             return res.status(200).json({
-                result: list,
+                result: list, cmtNumBox, likeNumBox,
                 success: true,
                 message: "성공",
             });
