@@ -1,3 +1,4 @@
+
 import CommentService from "../services/comment.service.js";
 import Comment from "../models/comment.js";
 
@@ -61,11 +62,13 @@ export default class CommentController {
                     success: false,
                     message: "존재하지않는 댓글",
                 });
+
             }
 
             const commentUpdate = await this.commentService.commentUpdate(
                 comment,
                 commentId
+
             );
             return res.status(200).json({
                 success: true,
@@ -74,10 +77,12 @@ export default class CommentController {
         } catch (error) {
             return next(error);
         }
+
     };
 
     commentDelete = async (req, res, next) => {
         const commentId = req.params.commentId;
+
         try {
             const findId = await Comment.findOne({ where: { id: commentId } });
             if (!findId) {
@@ -85,10 +90,12 @@ export default class CommentController {
                     success: false,
                     message: "존재하지않는 댓글",
                 });
+
             }
 
             const commentDelete = await this.commentService.commentDelete(
                 commentId
+
             );
 
             return res.status(200).json({ success: true });
@@ -97,3 +104,4 @@ export default class CommentController {
         }
     };
 }
+
