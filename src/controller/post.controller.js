@@ -14,6 +14,14 @@ class PostController {
     postview = async (req, res) => {
         try {
             const list = await PostService.postview();
+            let cmtNumBox = []
+            for(let i = 0; i < list.length; i++){
+                const cmtNum = list[i].Comments.length
+                // console.log(cmtNum)
+                cmtNumBox.push(cmtNum)
+            }
+            
+            console.log(cmtNumBox)
 
             if (!list) {
                 return res.status(400).json({
@@ -23,7 +31,7 @@ class PostController {
             }
 
             return res.status(200).json({
-                result: list,
+                result: list, cmtNumBox,
                 success: true,
                 message: "성공",
             });
