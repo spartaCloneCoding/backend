@@ -18,19 +18,19 @@ class PostController {
             if (!list) {
                 return res.status(400).json({
                     success: false,
-                    message: "게시글이 존재하지 않습니다"
+                    message: "게시글이 존재하지 않습니다",
                 });
             }
 
             return res.status(200).json({
                 result: list,
                 success: true,
-                message: "성공"
+                message: "성공",
             });
         } catch (err) {
             return res.status(400).json({
                 success: false,
-                message: err
+                message: err,
             });
         }
     };
@@ -44,19 +44,19 @@ class PostController {
             if (!post) {
                 return res.status(400).json({
                     success: false,
-                    message: "삭제되었거나 없는 게시글입니다"
+                    message: "삭제되었거나 없는 게시글입니다",
                 });
             }
 
             return res.status(200).json({
                 result: post,
                 success: true,
-                message: "성공"
+                message: "성공",
             });
         } catch (err) {
             return res.status(400).json({
                 success: false,
-                message: err
+                message: err,
             });
         }
     };
@@ -70,18 +70,18 @@ class PostController {
             if (result) {
                 return res.status(400).json({
                     success: false,
-                    message: "공란으로는 작성이 불가합니다"
+                    message: "공란으로는 작성이 불가합니다",
                 });
             } else {
                 return res.status(200).json({
                     success: true,
-                    message: "성공"
+                    message: "성공",
                 });
             }
         } catch (err) {
             return res.status(400).json({
                 success: false,
-                message: err
+                message: err,
             });
         }
     };
@@ -92,37 +92,44 @@ class PostController {
             const { userId } = res.locals;
             const { title, content } = req.body;
             const { postId } = req.params;
-            const result = await PostService.postupdate(title, content, postId, userId);
+            const result = await PostService.postupdate(
+                title,
+                content,
+                postId,
+                userId
+            );
 
-            if (result === "not exist user") {
+            if (result === null) {
                 return res.status(400).json({
                     success: false,
-                    message: "삭제 및 수정할 권한이 없습니다"
+                    message: "없는게시글입니다.",
                 });
             }
-            else if (result === "mismatched user") {
+
+            if (result === "mismatched user") {
                 return res.status(400).json({
                     success: false,
-                    message: "삭제 및 수정할 권한이 없습니다"
+                    message: "삭제 및 수정할 권한이 없습니다",
                 });
             }
 
             if (!result) {
                 return res.status(400).json({
                     success: false,
-                    message: "삭제되었거나 없는 게시글입니다"
-                });
-            } else {
-                return res.status(200).json({
-                    result: result,
-                    success: true,
-                    message: "성공"
+                    message: "삭제되었거나 없는 게시글입니다",
                 });
             }
+
+            return res.status(200).json({
+                result: result,
+                success: true,
+                message: "성공",
+            });
         } catch (err) {
+            console.log(err);
             return res.status(400).json({
                 success: false,
-                message: err
+                message: err,
             });
         }
     };
@@ -134,34 +141,27 @@ class PostController {
             const { postId } = req.params;
             const result = await PostService.postdelete(postId, userId);
 
-            if (result === "not exist user") {
+            if (result === null) {
                 return res.status(400).json({
                     success: false,
-                    message: "삭제 및 수정할 권한이 없습니다"
+                    message: "삭제되었거나 없는 게시글입니다",
                 });
             }
-            else if (result === "mismatched user") {
+            if (result === "mismatched user") {
                 return res.status(400).json({
                     success: false,
-                    message: "삭제 및 수정할 권한이 없습니다"
+                    message: "삭제 및 수정할 권한이 없습니다",
                 });
             }
 
-            if (result) {
-                return res.status(400).json({
-                    success: false,
-                    message: "삭제되었거나 없는 게시글입니다"
-                });
-            } else {
-                return res.status(200).json({
-                    success: true,
-                    message: "성공"
-                });
-            }
+            return res.status(200).json({
+                success: true,
+                message: "성공",
+            });
         } catch (err) {
             return res.status(400).json({
                 success: false,
-                message: err
+                message: err,
             });
         }
     };
@@ -173,49 +173,56 @@ class PostController {
         // console.log(userId)
 
         try {
-            const findLike = await Like.findOne({ where: { PostId: postId, UserId: userId } })
+            const findLike = await Like.findOne({
+                where: { PostId: postId, UserId: userId },
+            });
             // console.log(findLike.UserId)
             if (findLike) {
                 return res.status(400).json({
                     success: false,
-                    message: "이미 좋아요 한 댓글입니다"
-                })
+                    message: "이미 좋아요 한 댓글입니다",
+                });
             }
 
             const postLike = await PostService.postLike(postId, userId);
             return res.status(200).json({
                 success: true,
-                message: "좋아요 성공"
-            })
+                message: "좋아요 성공",
+            });
         } catch (error) {
-            console.log(error)
-            return next(error)
+            console.log(error);
+            return next(error);
         }
-    }
+    };
 
     postLikeDelete = async (req, res, next) => {
         const postId = req.params.postId;
         const userId = res.locals.userId;
 
         try {
-            const findLike = await Like.findOne({ where: { PostId: postId, UserId: userId } })
-            console.log(findLike)
+            const findLike = await Like.findOne({
+                where: { PostId: postId, UserId: userId },
+            });
+            console.log(findLike);
 
             if (!findLike) {
                 return res.status(400).json({
                     success: false,
-                    message: "좋아요를 하여야만 취소할 수 있습니다"
-                })
+                    message: "좋아요를 하여야만 취소할 수 있습니다",
+                });
             }
-            const postLikeDelete = await PostService.postLikeDelete(postId, userId);
+            const postLikeDelete = await PostService.postLikeDelete(
+                postId,
+                userId
+            );
             return res.status(200).json({
                 success: true,
-                message: '좋아요를 취소했습니다'
-            })
+                message: "좋아요를 취소했습니다",
+            });
         } catch (error) {
-            return next(error)
+            return next(error);
         }
-    }
+    };
 
     // 좋아요 개수 확인 조건 필요없음 0은 0임
     postLikeNum = async (req, res, next) => {
@@ -223,18 +230,18 @@ class PostController {
 
         try {
             const findLikeNum = await Like.findAll({
-                where: { like: true, PostId: postId }
-            })
+                where: { like: true, PostId: postId },
+            });
             console.log(findLikeNum.length);
             return res.status(200).json({
                 success: true,
                 message: "조회성공",
                 result: findLikeNum.length,
-            })
+            });
         } catch (error) {
-            return next(error)
+            return next(error);
         }
-    }
+    };
 }
 
 export default new PostController();

@@ -4,10 +4,10 @@ dotenv.config({ path: ".env" });
 
 const config = {
     development: {
-        username: process.env.DB_USER,
+        username: process.env.DB_ID,
         password: process.env.DB_PW,
         database: process.env.DB,
-        host: process.env.DB_ID,
+        host: process.env.DB_HOST,
         dialect: "mysql",
         logging: false,
         timezone: "+09:00",

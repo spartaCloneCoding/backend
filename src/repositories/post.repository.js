@@ -13,7 +13,7 @@ class Postrepositories {
     // 커뮤니티 삭제 = postdelete
 
     finduser = async (UserId) => {
-        const user = await User.findOne({where:{UserId},raw:true})
+        const user = await User.findOne({ where: { id: UserId }, raw: true });
 
         return user;
     };
@@ -21,9 +21,13 @@ class Postrepositories {
     postview = async () => {
         const list = await Post.findAll({
             where: {},
-            include: [{ model: User, attributes: ["nickname"] }, {model: Comment}, {model: Like}],
+            include: [
+                { model: User, attributes: ["nickname"] },
+                { model: Comment },
+                { model: Like },
+            ],
             attributes: { exclude: ["nickname", "UserId"] },
-            order: [['createdAt', 'DESC']],
+            order: [["createdAt", "DESC"]],
         });
 
         return list;
@@ -34,20 +38,23 @@ class Postrepositories {
             where: { id: postId },
             include: [{ model: User, attributes: ["nickname"] }],
             attributes: { exclude: ["nickname"] },
-            raw: true
+            raw: true,
         });
 
         return post;
     };
 
     postcreat = async (title, content, UserId) => {
-        await Post.create({ title, content, UserId});
+        await Post.create({ title, content, UserId });
 
         return;
     };
 
     postupdate = async (title, content, postId, UserId) => {
-        await Post.update({ title, content }, { where: { id: postId, UserId } });
+        await Post.update(
+            { title, content },
+            { where: { id: postId, UserId } }
+        );
 
         return;
     };
@@ -58,23 +65,23 @@ class Postrepositories {
         return;
     };
 
-    postLike = async(postId, userId) => {
+    postLike = async (postId, userId) => {
         const likeCreate = await Like.create({
-            PostId : postId,
-            UserId : userId,
-            like : true,
-        })
-
-        return likeCreate;
-    }
-
-    postLikeDelete = async(postId, userId) => {
-        const LikeDelete = await Like.destroy({
-            where : {PostId: postId, UserId : userId}
+            PostId: postId,
+            UserId: userId,
+            like: true,
         });
 
-        return LikeDelete
-    }
+        return likeCreate;
+    };
+
+    postLikeDelete = async (postId, userId) => {
+        const LikeDelete = await Like.destroy({
+            where: { PostId: postId, UserId: userId },
+        });
+
+        return LikeDelete;
+    };
 }
 
-export default new Postrepositories;
+export default new Postrepositories();
