@@ -31,7 +31,6 @@ class Postrepositories {
             order: [["createdAt", "DESC"]],
 
         });
-        // console.log(list[0].Comments.length)
 
         return list;
     };
