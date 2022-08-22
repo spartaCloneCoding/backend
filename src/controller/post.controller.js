@@ -16,14 +16,22 @@ class PostController {
             const list = await PostService.postview();
 
             if (!list) {
-                return res
-                    .status(400)
-                    .json({ message: "게시글이 존재하지 않습니다" });
+                return res.status(400).json({
+                    success: false,
+                    message: "게시글이 존재하지 않습니다"
+                });
             }
 
-            return res.status(200).json(list);
+            return res.status(200).json({
+                result: list,
+                success: true,
+                message: "성공"
+            });
         } catch (err) {
-            return res.status(400).json(err);
+            return res.status(400).json({
+                success: false,
+                message: err
+            });
         }
     };
 
@@ -34,14 +42,22 @@ class PostController {
             const post = await PostService.postviewdetail(postId);
 
             if (!post) {
-                return res
-                    .status(400)
-                    .json({ message: "삭제되었거나 없는 게시글입니다" });
+                return res.status(400).json({
+                    success: false,
+                    message: "삭제되었거나 없는 게시글입니다"
+                });
             }
 
-            return res.status(200).json(post);
+            return res.status(200).json({
+                result: post,
+                success: true,
+                message: "성공"
+            });
         } catch (err) {
-            return res.status(400).json(err);
+            return res.status(400).json({
+                success: false,
+                message: err
+            });
         }
     };
 
@@ -52,51 +68,101 @@ class PostController {
             const { title, content } = req.body;
             const result = await PostService.postcreat(title, content, userId);
             if (result) {
-                return res
-                    .status(400)
-                    .json({ message: "공란으로는 작성이 불가합니다" });
+                return res.status(400).json({
+                    success: false,
+                    message: "공란으로는 작성이 불가합니다"
+                });
             } else {
-                return res.status(200).json({ message: "성공" });
+                return res.status(200).json({
+                    success: true,
+                    message: "성공"
+                });
             }
         } catch (err) {
-            return res.status(400).json(err);
+            return res.status(400).json({
+                success: false,
+                message: err
+            });
         }
     };
 
     // 커뮤니티 수정
     postupdate = async (req, res) => {
         try {
+            const { userId } = res.locals;
             const { title, content } = req.body;
             const { postId } = req.params;
-            const result = await PostService.postupdate(title, content, postId);
+            const result = await PostService.postupdate(title, content, postId, userId);
 
-            if (result) {
-                return res
-                    .status(400)
-                    .json({ message: "삭제되었거나 없는 게시글입니다" });
+            if (result === "not exist user") {
+                return res.status(400).json({
+                    success: false,
+                    message: "삭제 및 수정할 권한이 없습니다"
+                });
+            }
+            else if (result === "mismatched user") {
+                return res.status(400).json({
+                    success: false,
+                    message: "삭제 및 수정할 권한이 없습니다"
+                });
+            }
+
+            if (!result) {
+                return res.status(400).json({
+                    success: false,
+                    message: "삭제되었거나 없는 게시글입니다"
+                });
             } else {
-                return res.status(200).json({ message: "성공" });
+                return res.status(200).json({
+                    result: result,
+                    success: true,
+                    message: "성공"
+                });
             }
         } catch (err) {
-            return res.status(400).json(err);
+            return res.status(400).json({
+                success: false,
+                message: err
+            });
         }
     };
 
     // 커뮤니티 삭제
     postdelete = async (req, res) => {
         try {
+            const { userId } = res.locals;
             const { postId } = req.params;
-            const result = await PostService.postdelete(postId);
+            const result = await PostService.postdelete(postId, userId);
+
+            if (result === "not exist user") {
+                return res.status(400).json({
+                    success: false,
+                    message: "삭제 및 수정할 권한이 없습니다"
+                });
+            }
+            else if (result === "mismatched user") {
+                return res.status(400).json({
+                    success: false,
+                    message: "삭제 및 수정할 권한이 없습니다"
+                });
+            }
 
             if (result) {
-                return res
-                    .status(400)
-                    .json({ message: "삭제되었거나 없는 게시글입니다" });
+                return res.status(400).json({
+                    success: false,
+                    message: "삭제되었거나 없는 게시글입니다"
+                });
             } else {
-                return res.status(200).json({ message: "성공" });
+                return res.status(200).json({
+                    success: true,
+                    message: "성공"
+                });
             }
         } catch (err) {
-            return res.status(400).json(err);
+            return res.status(400).json({
+                success: false,
+                message: err
+            });
         }
     };
 
@@ -107,21 +173,21 @@ class PostController {
         // console.log(userId)
 
         try {
-            const findLike = await Like.findOne({ where : {PostId : postId, UserId : userId}})
+            const findLike = await Like.findOne({ where: { PostId: postId, UserId: userId } })
             // console.log(findLike.UserId)
-            if(findLike){
+            if (findLike) {
                 return res.status(400).json({
                     success: false,
-                    message : "이미 좋아요 한 댓글입니다"
+                    message: "이미 좋아요 한 댓글입니다"
                 })
             }
 
             const postLike = await PostService.postLike(postId, userId);
             return res.status(200).json({
-                success : true,
-                message : "좋아요 성공"
+                success: true,
+                message: "좋아요 성공"
             })
-        } catch(error) {
+        } catch (error) {
             console.log(error)
             return next(error)
         }
@@ -131,20 +197,20 @@ class PostController {
         const postId = req.params.postId;
         const userId = res.locals.userId;
 
-        try{
-            const findLike = await Like.findOne({ where : {PostId : postId, UserId : userId}})
+        try {
+            const findLike = await Like.findOne({ where: { PostId: postId, UserId: userId } })
             console.log(findLike)
 
-            if(!findLike){
+            if (!findLike) {
                 return res.status(400).json({
-                    success : false,
-                    message : "좋아요를 하여야만 취소할 수 있습니다"
+                    success: false,
+                    message: "좋아요를 하여야만 취소할 수 있습니다"
                 })
             }
             const postLikeDelete = await PostService.postLikeDelete(postId, userId);
             return res.status(200).json({
-                success : true,
-                message : '좋아요를 취소했습니다'
+                success: true,
+                message: '좋아요를 취소했습니다'
             })
         } catch (error) {
             return next(error)
@@ -155,17 +221,17 @@ class PostController {
     postLikeNum = async (req, res, next) => {
         const postId = req.params.postId;
 
-        try{
+        try {
             const findLikeNum = await Like.findAll({
-                where : {like : true, PostId : postId}
+                where: { like: true, PostId: postId }
             })
             console.log(findLikeNum.length);
             return res.status(200).json({
-                success : true,
-                message : "조회성공",
-                result : findLikeNum.length,
+                success: true,
+                message: "조회성공",
+                result: findLikeNum.length,
             })
-        } catch(error){
+        } catch (error) {
             return next(error)
         }
     }

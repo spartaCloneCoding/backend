@@ -12,6 +12,12 @@ class Postrepositories {
     // 커뮤니티 수정 = postupdate
     // 커뮤니티 삭제 = postdelete
 
+    finduser = async (UserId) => {
+        const user = await User.findOne({where:{UserId},raw:true})
+
+        return user;
+    };
+
     postview = async () => {
         const list = await Post.findAll({
             where: {},
@@ -28,7 +34,7 @@ class Postrepositories {
         const post = await Post.findOne({
             where: { id: postId },
             include: [{ model: User, attributes: ["nickname"] }],
-            attributes: { exclude: ["nickname", "UserId"] },
+            attributes: { exclude: ["nickname"] },
             raw: true
         });
 
@@ -41,14 +47,14 @@ class Postrepositories {
         return;
     };
 
-    postupdate = async (title, content, postId) => {
-        await Post.update({ title, content }, { where: { id: postId } });
+    postupdate = async (title, content, postId, UserId) => {
+        await Post.update({ title, content }, { where: { id: postId, UserId } });
 
         return;
     };
 
-    postdelete = async (postId) => {
-        await Post.destroy({ where: { id: postId } });
+    postdelete = async (postId, UserId) => {
+        await Post.destroy({ where: { id: postId, UserId } });
 
         return;
     };

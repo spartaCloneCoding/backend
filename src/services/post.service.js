@@ -39,24 +39,42 @@ class PostService {
         return false;
     };
 
-    postupdate = async (title, content, postId) => {
+    postupdate = async (title, content, postId, UserId) => {
+        const user = await Postrepositories.finduser(UserId);
+        if(user === null){
+            return "not exist user";
+        }
+
         const post = await Postrepositories.postviewdetail(postId);
 
-        if(post === null){
-            return true
+        if(user.UserId !== post.UserId){
+            return "mismatched user"
         }
-        Postrepositories.postupdate(title, content, postId);
 
-        return false;
+        if(post === null){
+            return false
+        }
+        Postrepositories.postupdate(title, content, postId, UserId);
+
+        return post;
     };
 
-    postdelete = async (postId) => {
+    postdelete = async (postId, UserId) => {
+        const user = await Postrepositories.finduser(UserId);
+        if(user === null){
+            return "not exist user";
+        }
+
         const post = await Postrepositories.postviewdetail(postId);
+
+        if(user.UserId !== post.UserId){
+            return "mismatched user"
+        }
 
         if(post === null){
             return true
         }
-        Postrepositories.postdelete(postId)
+        Postrepositories.postdelete(postId, UserId)
 
         return false;
     };
