@@ -35,7 +35,6 @@ const options = {
 };
 
 const sessionStore = new MySQLStore(options);
-
 app.use(
     session({
         secret: process.env.SESSION_KEY,
