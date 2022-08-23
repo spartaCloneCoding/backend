@@ -25,4 +25,6 @@ router.post("/login", loginCheckMiddleware, userController.loginUser);
 // 로그아웃
 router.get("/logout", logoutCheckMiddleware, userController.logOutUser);
 
+router.get("/test", userController.test);
+
 export default router;
