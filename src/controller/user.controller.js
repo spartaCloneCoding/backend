@@ -6,7 +6,7 @@ class UserController {
     userService = new UserService();
 
     test = (req, res) => {
-        res.json(res.locals.email);
+        res.json(res.locals.nickname);
     };
 
     joinUser = async (req, res) => {
