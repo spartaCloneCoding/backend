@@ -14,7 +14,7 @@ class PostController {
     postview = async (req, res) => {
         try {
             const list = await PostService.postview();
-            // let maptest = cmtNumBox.map()
+
             
             if (!list) {
                 return res.status(400).json({
@@ -22,9 +22,10 @@ class PostController {
                     message: "게시글이 존재하지 않습니다",
                 });
             }
-
+            console.log(cmtNumBox)
+            console.log(likeNumBox)
             return res.status(200).json({
-                result: list,
+                result: list, cmtNumBox, likeNumBox,
                 success: true,
                 message: "성공",
             });
