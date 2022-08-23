@@ -16,7 +16,38 @@ class PostService {
             return false;
         }
 
-        return list;
+        let cmtNumBox = []
+            let likeNumBox = []
+            for(let i = 0; i < list.length; i++){
+                const cmtNum = list[i].Comments.length
+                cmtNumBox.push(cmtNum)
+            }
+            
+
+            for(let i = 0; i < list.length; i++){
+                const likeNum = list[i].Likes.length
+                likeNumBox.push(likeNum)
+            }
+
+            for(let i=0; i<list.length; i++){
+                list[i]["cmtNum"] = cmtNumBox[i]
+                list[i]["likeNum"] = likeNumBox[i]
+            }
+
+        return list
+        .map((currentValue, index) => {
+            return {
+                id : currentValue.id,
+                title : currentValue.title,
+                content : currentValue.content,
+                createdAt : currentValue.createdAt,
+                updatedAt : currentValue.updatedAt,
+                User : currentValue.User,
+                Comments : currentValue.Comments,
+                cmtNum : cmtNumBox[index],
+                likeNum : likeNumBox[index],
+            }
+        });
     };
 
     postviewdetail = async (postId) => {

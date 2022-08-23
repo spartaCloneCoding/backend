@@ -32,7 +32,7 @@ class Postrepositories {
 
         });
 
-        return list;
+        return list;        
     };
 
     postviewdetail = async (postId) => {
