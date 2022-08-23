@@ -14,7 +14,7 @@ class PostController {
     postview = async (req, res) => {
         try {
             const list = await PostService.postview();
-            // let maptest = cmtNumBox.map()
+            
             
             if (!list) {
                 return res.status(400).json({
