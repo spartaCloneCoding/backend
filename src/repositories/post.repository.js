@@ -33,7 +33,7 @@ class Postrepositories {
         });
         // console.log(list[0].Comments.length)
 
-        return list;
+        return list;        
     };
 
     postviewdetail = async (postId) => {
