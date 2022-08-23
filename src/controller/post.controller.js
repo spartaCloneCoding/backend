@@ -22,10 +22,9 @@ class PostController {
                     message: "게시글이 존재하지 않습니다",
                 });
             }
-            console.log(cmtNumBox)
-            console.log(likeNumBox)
+
             return res.status(200).json({
-                result: list, cmtNumBox, likeNumBox,
+                result: list,
                 success: true,
                 message: "성공",
             });
