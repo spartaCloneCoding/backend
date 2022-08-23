@@ -53,7 +53,9 @@ class UserController {
         if (validationLogin) {
             req.session.email = email;
             req.session.isLogined = true;
-            res.status(200).json({ success: true, message: "로그인 성공" });
+            req.session.save(function () {
+                res.status(200).json({ success: true, message: "로그인 성공" });
+            });
         } else {
             res.status(400).json({
                 success: false,
