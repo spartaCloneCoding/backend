@@ -14,7 +14,7 @@ class PostController {
     postview = async (req, res) => {
         try {
             const list = await PostService.postview();
-            
+
             
             if (!list) {
                 return res.status(400).json({

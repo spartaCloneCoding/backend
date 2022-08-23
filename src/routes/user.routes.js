@@ -4,6 +4,7 @@ import UserValidation from "../validation/user.validation.js";
 import {
     loginCheckMiddleware,
     logoutCheckMiddleware,
+    authMiddleware,
 } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -24,5 +25,7 @@ router.post("/login", loginCheckMiddleware, userController.loginUser);
 
 // 로그아웃
 router.get("/logout", logoutCheckMiddleware, userController.logOutUser);
+
+router.get("/test", authMiddleware, userController.test);
 
 export default router;
