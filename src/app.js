@@ -19,9 +19,10 @@ sequelize
     .sync({ force: false })
     .then(() => console.log("db connect"))
     .catch((err) => console.error(err));
+
 app.use(
     cors({
-        origin: "*",
+        origin: true,
         credentials: true,
     })
 );
