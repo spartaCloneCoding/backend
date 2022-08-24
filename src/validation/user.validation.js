@@ -6,7 +6,7 @@ class UserValidation {
     // 회원가입시 유효성 검사
     joinValidation = async (email, password, confirmPw, nickname) => {
         const schema = Joi.object({
-            email: Joi.string().email().max(20).required(),
+            email: Joi.string().email().max(30).required(),
             password: Joi.string()
                 .pattern(new RegExp("^[a-zA-Z0-9]{4,16}$"))
                 .required(),
@@ -79,7 +79,9 @@ class UserValidation {
 
     validationLogin = async (email, password) => {
         try {
-            const userInfo = await User.findOne({ where: { email } });
+            const userInfo = await User.findOne({
+                where: { email, isSocial: false },
+            });
 
             const validationPassword = await bcrypt.compare(
                 password,
@@ -87,7 +89,7 @@ class UserValidation {
             );
 
             if (validationPassword) {
-                return true;
+                return userInfo.id;
             } else {
                 // 패스워드 검증이 실패한 경우
                 return false;
