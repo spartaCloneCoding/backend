@@ -84,7 +84,7 @@ class UserController {
             },
             process.env.JWTKEY
         );
-        res.status(200).json({ success: true, message: token });
+        res.redirect(`/?token=${token}`);
     };
 }
 
