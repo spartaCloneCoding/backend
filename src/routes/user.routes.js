@@ -20,13 +20,18 @@ router.post("/login", userController.loginUser);
 
 router.get("/test", authMiddleware, userController.test);
 
-// 소셜 로그인
+// 카카오 로그인하기 라우터
 router.get("/auth/kakao", passport.authenticate("kakao"));
+/* 위에 주소로 요청이 오게 되면 카카오 로그인 페이지로 가게 되고, 카카오 서버를 통해
+ 카카오 로그인을 하게 되면, 밑에 있는 라우터로 요청이 가게 된다.  */
 
 router.get(
     "/auth/kakao/callback",
+    /*     KaKaoStrategy로 가서 카카오계정 정보와 DB를 비교해서 회원가입 시키거나 
+            로그인 처리하게 된다.
+    */
     passport.authenticate("kakao", {
-        failureRedirect: "/",
+        failureRedirect: "/", // 카카오 전략이 실패하면 실행 되는 코드
     }),
     userController.socialLogin
 );

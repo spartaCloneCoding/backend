@@ -2,7 +2,6 @@ import UserService from "../services/user.service.js";
 import UserValidation from "../validation/user.validation.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import passport from "passport";
 dotenv.config();
 
 const validation = new UserValidation();
@@ -37,11 +36,10 @@ class UserController {
             password,
             nickname
         );
-
-        if (joinUser.error) {
+        if (!joinUser) {
             return res.status(400).json({
                 success: false,
-                message: joinUser.error,
+                message: "이메일중복",
             });
         }
         res.status(200).json({
@@ -61,12 +59,12 @@ class UserController {
         if (validationLogin !== false) {
             const token = jwt.sign(
                 {
-                    userId: validationLogin,
+                    userId: validationLogin.userId,
+                    userNickname: validationLogin.userNickname,
                 },
                 process.env.JWTKEY
             );
 
-            // res.cookie("token", token);
             res.status(200).json({ success: true, message: token });
         } else {
             res.status(400).json({
@@ -82,10 +80,10 @@ class UserController {
         const token = jwt.sign(
             {
                 userId: user.dataValues.id,
+                userNickname: user.dataValues.nickname,
             },
             process.env.JWTKEY
         );
-        // res.cookie("token", token);
         res.status(200).json({ success: true, message: token });
     };
 }
