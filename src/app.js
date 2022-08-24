@@ -2,14 +2,16 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import router from "./routes/index.js";
+import cookieParser from "cookie-parser";
+import passport from "passport";
+import passportConfig from "./passport/index.js";
 import session from "express-session";
-import MySQLStore from "express-mysql-session";
+
+passportConfig();
 
 dotenv.config();
 
 import { sequelize } from "./models/index.js";
-
-MySQLStore(session);
 
 const app = express();
 
@@ -27,24 +29,21 @@ app.use(
     })
 );
 
-const options = {
-    host: process.env.DB_HOST,
-    port: 3306,
-    user: process.env.DB_ID,
-    password: process.env.DB_PW,
-    database: "spartacode",
-};
-
-const sessionStore = new MySQLStore(options);
+app.use(cookieParser());
 app.use(
     session({
-        secret: process.env.SESSION_KEY,
         resave: false,
         saveUninitialized: false,
-        store: sessionStore,
-        cookie: { maxAge: 1000 * 60 * 60 * 1 },
+        secret: process.env.SESSION_KEY,
+        cookie: {
+            httpOnly: true,
+            secure: false,
+        },
     })
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

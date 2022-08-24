@@ -1,12 +1,17 @@
 import UserService from "../services/user.service.js";
 import UserValidation from "../validation/user.validation.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import passport from "passport";
+dotenv.config();
+
 const validation = new UserValidation();
 
 class UserController {
     userService = new UserService();
 
     test = (req, res) => {
-        res.json(res.locals.nickname);
+        res.json(res.locals);
     };
 
     joinUser = async (req, res) => {
@@ -18,6 +23,7 @@ class UserController {
             nickname
         );
 
+        // 유효성 검사
         if (validationUser) {
             return res.status(400).json({
                 success: false,
@@ -25,15 +31,17 @@ class UserController {
             });
         }
 
-        const joinUserError = await this.userService.joinUser(
+        // 중복 검사
+        const joinUser = await this.userService.joinUser(
             email,
             password,
             nickname
         );
-        if (joinUserError) {
+
+        if (joinUser.error) {
             return res.status(400).json({
                 success: false,
-                message: joinUserError.error.original.sqlMessage,
+                message: joinUser.error,
             });
         }
         res.status(200).json({
@@ -50,12 +58,16 @@ class UserController {
             password
         );
 
-        if (validationLogin) {
-            req.session.email = email;
-            req.session.isLogined = true;
-            req.session.save(function () {
-                res.status(200).json({ success: true, message: "로그인 성공" });
-            });
+        if (validationLogin !== false) {
+            const token = jwt.sign(
+                {
+                    userId: validationLogin,
+                },
+                process.env.JWTKEY
+            );
+
+            // res.cookie("token", token);
+            res.status(200).json({ success: true, message: token });
         } else {
             res.status(400).json({
                 success: false,
@@ -64,18 +76,17 @@ class UserController {
         }
     };
 
-    logOutUser = async (req, res) => {
-        try {
-            req.session.destroy(() => {
-                req.session;
-            });
-            res.status(200).json({ success: true, message: "로그아웃 성공" });
-        } catch (error) {
-            res.status(400).json({
-                success: false,
-                message: "로그아웃 실패",
-            });
-        }
+    // 소셜 로그인
+    socialLogin = async (req, res) => {
+        const user = req.user;
+        const token = jwt.sign(
+            {
+                userId: user.dataValues.id,
+            },
+            process.env.JWTKEY
+        );
+        // res.cookie("token", token);
+        res.status(200).json({ success: true, message: token });
     };
 }
 
