@@ -11,13 +11,7 @@ class UserRepository {
                 where: { email },
             });
             if (exsistemail) {
-                return { error: "이메일 중복" };
-            }
-            const exsistnickname = await User.findOne({
-                where: { nickname },
-            });
-            if (exsistnickname) {
-                return { error: "닉네임 중복" };
+                return false;
             }
 
             await User.create({
@@ -26,6 +20,7 @@ class UserRepository {
                 nickname,
                 isSocial: false,
             });
+            return true;
         } catch (error) {
             return { error };
         }

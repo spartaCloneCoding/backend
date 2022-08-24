@@ -54,29 +54,6 @@ class UserValidation {
         }
     };
 
-    // 닉네임이 존재하는지 중복체크
-    nickname_check = async (req, res) => {
-        const { nickname } = req.body;
-
-        try {
-            const checkNickname = await User.findOne({ where: { nickname } });
-
-            if (checkNickname) {
-                return res.status(400).json({
-                    success: false,
-                    message: "중복된 닉네임",
-                });
-            }
-
-            res.status(200).json({
-                success: true,
-                message: "중복되지 않음",
-            });
-        } catch (error) {
-            res.status(400).json({ success: false, message: error });
-        }
-    };
-
     validationLogin = async (email, password) => {
         try {
             const userInfo = await User.findOne({
@@ -89,7 +66,7 @@ class UserValidation {
             );
 
             if (validationPassword) {
-                return userInfo.id;
+                return { userId: userInfo.id, userNickname: userInfo.nickname };
             } else {
                 // 패스워드 검증이 실패한 경우
                 return false;
