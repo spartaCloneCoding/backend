@@ -7,7 +7,25 @@ class UserRepository {
         const hashpassword = await bcrypt.hash(password, salt);
 
         try {
-            await User.create({ email, password: hashpassword, nickname });
+            const exsistemail = await User.findOne({
+                where: { email },
+            });
+            if (exsistemail) {
+                return { error: "이메일 중복" };
+            }
+            const exsistnickname = await User.findOne({
+                where: { nickname },
+            });
+            if (exsistnickname) {
+                return { error: "닉네임 중복" };
+            }
+
+            await User.create({
+                email,
+                password: hashpassword,
+                nickname,
+                isSocial: false,
+            });
         } catch (error) {
             return { error };
         }
