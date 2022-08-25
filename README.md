@@ -7,6 +7,7 @@
 [Github](https://github.com/spartaCloneCoding/backend.git)
 
 |팀원|역할분담|
+|------|------|
 |이상현|로그인, 회원가입, 소셜로그인 기능구현, 미들웨어 구현, 서버배포|
 |윤상돈|comment CRUD API, DB테이블 설계, RDS 설정|
 |김영광|post CRUD API|
