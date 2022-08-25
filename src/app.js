@@ -21,7 +21,7 @@ sequelize
     .catch((err) => console.error(err));
 app.use(
     cors({
-        origin: "*",
+        origin: true,
         credentials: true,
     })
 );
@@ -66,4 +66,4 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(app.get("port"), () => console.log(3000));
+server.listen(app.get("port"), () => console.log(3000));
