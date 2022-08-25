@@ -19,8 +19,6 @@ router.post("/join", userController.joinUser);
 // 로그인
 router.post("/login", userController.loginUser);
 
-router.get("/test", authMiddleware, userController.test);
-
 // 카카오 로그인하기 라우터
 router.get("/auth/kakao", passport.authenticate("kakao"));
 /* 위에 주소로 요청이 오게 되면 카카오 로그인 페이지로 가게 되고, 카카오 서버를 통해
