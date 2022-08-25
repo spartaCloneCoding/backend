@@ -4,7 +4,6 @@ import cors from "cors";
 import router from "./routes/index.js";
 import cookieParser from "cookie-parser";
 
-// import passport from "passport";
 import passportConfig from "./passport/index.js";
 import session from "express-session";
 
@@ -54,8 +53,6 @@ app.use(
     })
 );
 
-// app.use(passport.initialize());
-// app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
