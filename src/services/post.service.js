@@ -17,22 +17,22 @@ class PostService {
         }
 
         let cmtNumBox = []
-            let likeNumBox = []
-            for(let i = 0; i < list.length; i++){
-                const cmtNum = list[i].Comments.length
-                cmtNumBox.push(cmtNum)
-            }
-            
+        let likeNumBox = []
+        for (let i = 0; i < list.length; i++) {
+            const cmtNum = list[i].Comments.length
+            cmtNumBox.push(cmtNum)
+        }
 
-            for(let i = 0; i < list.length; i++){
-                const likeNum = list[i].Likes.length
-                likeNumBox.push(likeNum)
-            }
 
-            for(let i=0; i<list.length; i++){
-                list[i]["cmtNum"] = cmtNumBox[i]
-                list[i]["likeNum"] = likeNumBox[i]
-            }
+        for (let i = 0; i < list.length; i++) {
+            const likeNum = list[i].Likes.length
+            likeNumBox.push(likeNum)
+        }
+
+        for (let i = 0; i < list.length; i++) {
+            list[i]["cmtNum"] = cmtNumBox[i]
+            list[i]["likeNum"] = likeNumBox[i]
+        }
 
         return list
         .map((currentValue, index) => {
@@ -56,8 +56,19 @@ class PostService {
         if (post === null) {
             return false;
         }
-
-        return post;
+        console.log(post);
+        
+        return {
+            id : post.id,
+            title : post.title,
+            content : post.content,
+            createdAt : post.createdAt,
+            updatedAt : post.updatedAt,
+            User : post.User,
+            Comments : post.Comments,
+            cmtNum : post.Comments.length,
+            likeNum : post.Likes.length,
+        };
     };
 
     postcreat = async (title, content, UserId) => {
