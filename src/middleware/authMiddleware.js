@@ -23,7 +23,6 @@ const authMiddleware = async (req, res, next) => {
         res.locals.nickname = user.userNickname;
         next();
     } catch (error) {
-        console.log(error);
         res.status(400).json({
             errorMessage: "로그인 후 사용하세요.",
         });

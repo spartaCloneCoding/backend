@@ -1,4 +1,3 @@
-
 import CommentService from "../services/comment.service.js";
 import Comment from "../models/comment.js";
 
@@ -63,25 +62,23 @@ export default class CommentController {
                     success: false,
                     message: "존재하지않는 댓글",
                 });
-
             }
-            if(userId !== findId.UserId){
+            if (userId !== findId.UserId) {
                 return res.status(400).json({
                     success: false,
-                    message: "본인의 글만 수정할 수 있습니다"
-                })
+                    message: "본인의 글만 수정할 수 있습니다",
+                });
             }
-            if(comment.length === 0){
+            if (comment.length === 0) {
                 return res.status(400).json({
                     success: false,
-                    message: "댓글을 입력해주세요"
-                })
+                    message: "댓글을 입력해주세요",
+                });
             }
 
             const commentUpdate = await this.commentService.commentUpdate(
                 comment,
                 commentId
-
             );
             return res.status(200).json({
                 success: true,
@@ -90,13 +87,11 @@ export default class CommentController {
         } catch (error) {
             return next(error);
         }
-
     };
 
     commentDelete = async (req, res, next) => {
         const commentId = req.params.commentId;
         const userId = res.locals.userId;
-        console.log(userId)
 
         try {
             const findId = await Comment.findOne({ where: { id: commentId } });
@@ -105,19 +100,16 @@ export default class CommentController {
                     success: false,
                     message: "존재하지않는 댓글",
                 });
-
             }
-            console.log(findId.UserId)
-            if(userId !== findId.UserId){
+            if (userId !== findId.UserId) {
                 return res.status(400).json({
-                    success : false,
-                    message : "본인의 댓글만 삭제가능합니다"
-                })
+                    success: false,
+                    message: "본인의 댓글만 삭제가능합니다",
+                });
             }
 
             const commentDelete = await this.commentService.commentDelete(
                 commentId
-
             );
 
             return res.status(200).json({ success: true });
@@ -126,4 +118,3 @@ export default class CommentController {
         }
     };
 }
-

@@ -13,14 +13,14 @@ describe("checkLogin", () => {
     };
 
     const res = {
-        status: jest.fn(() => this),
-        send: jest.fn(),
-        // locals: { userId: "" },
-        // locals: { nickname: "" },
+        status: jest.fn(() => res),
+        json: jest.fn(),
+        locals: { userId: "" },
+        locals: { nickname: "" },
     };
     const next = jest.fn();
 
-    test("미들웨어 테스트 로그인 되어있으면 nexxt를 호출 해야 함", () => {
+    test("미들웨어 테스트 로그인 되어있으면 next를 호출 해야 함", () => {
         jwt.verify.mockReturnValue({ userId: 1, nickname: "hi" });
         authMiddleware(req, res, next);
 

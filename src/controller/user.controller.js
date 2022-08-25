@@ -10,10 +10,6 @@ const validation = new UserValidation();
 class UserController {
     userService = new UserService();
 
-    test = (req, res) => {
-        res.json(res.locals);
-    };
-
     joinUser = async (req, res) => {
         // 바디 값으로 유저의 회원가입 정보를 받아옴
         const { email, password, confirmPw, nickname } = req.body;

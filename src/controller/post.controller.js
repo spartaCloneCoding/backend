@@ -127,7 +127,6 @@ class PostController {
                 message: "성공",
             });
         } catch (err) {
-            console.log(err);
             return res.status(400).json({
                 success: false,
                 message: err,
@@ -171,13 +170,11 @@ class PostController {
     postLike = async (req, res, next) => {
         const postId = req.params.postId;
         const userId = res.locals.userId;
-        // console.log(userId)
 
         try {
             const findLike = await Like.findOne({
                 where: { PostId: postId, UserId: userId },
             });
-            // console.log(findLike.UserId)
             if (findLike) {
                 return res.status(400).json({
                     success: false,
@@ -191,7 +188,6 @@ class PostController {
                 message: "좋아요 성공",
             });
         } catch (error) {
-            console.log(error);
             return next(error);
         }
     };
@@ -204,7 +200,6 @@ class PostController {
             const findLike = await Like.findOne({
                 where: { PostId: postId, UserId: userId },
             });
-            console.log(findLike);
 
             if (!findLike) {
                 return res.status(400).json({
@@ -233,7 +228,6 @@ class PostController {
             const findLikeNum = await Like.findAll({
                 where: { like: true, PostId: postId },
             });
-            console.log(findLikeNum.length);
             return res.status(200).json({
                 success: true,
                 message: "조회성공",
