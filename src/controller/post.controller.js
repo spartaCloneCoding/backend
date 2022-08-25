@@ -15,7 +15,6 @@ class PostController {
         try {
             const list = await PostService.postview();
 
-            
             if (!list) {
                 return res.status(400).json({
                     success: false,
@@ -175,6 +174,8 @@ class PostController {
             const findLike = await Like.findOne({
                 where: { PostId: postId, UserId: userId },
             });
+
+            // 좋아요 db에서 postId, userId를 통하여 조회한 후 존재한다면 이미 좋아요 한 댓글 출력
             if (findLike) {
                 return res.status(400).json({
                     success: false,
@@ -182,6 +183,7 @@ class PostController {
                 });
             }
 
+            // 조회 후 없다면 db에 like = BOOLEAN 추가, postId와 userId 추가(외래키)
             const postLike = await PostService.postLike(postId, userId);
             return res.status(200).json({
                 success: true,
@@ -201,12 +203,14 @@ class PostController {
                 where: { PostId: postId, UserId: userId },
             });
 
+            // 라이크 db조회 한 후 존재하지 않다면 좋아요를 하여야만 취소할 수 있습니다 출력
             if (!findLike) {
                 return res.status(400).json({
                     success: false,
                     message: "좋아요를 하여야만 취소할 수 있습니다",
                 });
             }
+            // 존재한다면 그 좋아요db의 row를 삭제
             const postLikeDelete = await PostService.postLikeDelete(
                 postId,
                 userId
@@ -228,6 +232,7 @@ class PostController {
             const findLikeNum = await Like.findAll({
                 where: { like: true, PostId: postId },
             });
+
             return res.status(200).json({
                 success: true,
                 message: "조회성공",
