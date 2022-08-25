@@ -127,7 +127,6 @@ class PostController {
                 message: "성공",
             });
         } catch (err) {
-            console.log(err);
             return res.status(400).json({
                 success: false,
                 message: err,
@@ -191,7 +190,6 @@ class PostController {
                 message: "좋아요 성공",
             });
         } catch (error) {
-            console.log(error);
             return next(error);
         }
     };

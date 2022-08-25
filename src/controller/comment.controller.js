@@ -108,7 +108,7 @@ export default class CommentController {
     commentDelete = async (req, res, next) => {
         const commentId = req.params.commentId;
         const userId = res.locals.userId;
-        console.log(userId)
+
 
         try {
             // params로 받은 commentId를 통하여 댓글 db에서 조회한 후 존재하지 않다면 존재하지 않는 댓글 출력
