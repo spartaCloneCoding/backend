@@ -10,6 +10,7 @@ const userController = new UserController();
 const userValidation = new UserValidation();
 
 // 이메일 중복체크
+// userValidation 클래스를 가지고 와서 검증 실행
 router.post("/email_check", userValidation.email_check);
 
 // 회원가입
@@ -33,7 +34,8 @@ router.get(
     passport.authenticate("kakao", {
         failureRedirect: "/", // 카카오 전략이 실패하면 실행 되는 코드
     }),
-    userController.socialLogin
+
+    userController.socialLogin // userController 실행
 );
 
 export default router;
