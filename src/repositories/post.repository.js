@@ -69,6 +69,7 @@ class Postrepositories {
         return;
     };
 
+    // 좋아요 생성 기능 레포지토리 계층
     postLike = async (postId, userId) => {
         const likeCreate = await Like.create({
             PostId: postId,
@@ -79,6 +80,7 @@ class Postrepositories {
         return likeCreate;
     };
 
+    // 좋아요 삭제 기능 레포지토리 계층
     postLikeDelete = async (postId, userId) => {
         const LikeDelete = await Like.destroy({
             where: { PostId: postId, UserId: userId },
