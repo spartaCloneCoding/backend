@@ -7,10 +7,14 @@ node_modules
 ## lock-json
 package-lock.json
 
-
 ## signin.html
 ## signin.html
 
+<<<<<<< HEAD
+## coverage
+coverage/
+=======
 sockets/
 
 views/
+>>>>>>> a62917911408b56caa43d76f6bceb8a44b9bfa24

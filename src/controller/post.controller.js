@@ -15,7 +15,6 @@ class PostController {
         try {
             const list = await PostService.postview();
 
-            
             if (!list) {
                 return res.status(400).json({
                     success: false,
@@ -175,6 +174,7 @@ class PostController {
             const findLike = await Like.findOne({
                 where: { PostId: postId, UserId: userId },
             });
+
             // 좋아요 db에서 postId, userId를 통하여 조회한 후 존재한다면 이미 좋아요 한 댓글 출력
             if (findLike) {
                 return res.status(400).json({

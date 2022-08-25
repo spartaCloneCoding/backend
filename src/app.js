@@ -75,4 +75,4 @@ app.use((err, req, res, next) => {
     });
 });
 
-server.listen(app.get("port"), () => console.log(3000));
+app.listen(app.get("port"), () => console.log(3000));
