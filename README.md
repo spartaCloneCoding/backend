@@ -2,6 +2,7 @@
 스파르타 코딩클럽을 클론 코딩을 통하여 CRUD를 복습하며 도전과제로 소셜로그인과 좋아요 기능을 추가
 
 ## 시연영상
+(https://youtu.be/LLnohzJN6_4)
 
 ## 백엔드 팀원 소개
 [Github](https://github.com/spartaCloneCoding/backend.git)
