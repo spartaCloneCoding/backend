@@ -1,61 +1,34 @@
-import User from "../models/user.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 const authMiddleware = async (req, res, next) => {
+    // 요청 헤더에서 토큰 값을 가지고 옴
+    const { authorization } = req.headers;
+    const [tokenType, tokenValue] = (authorization || "").split(" "); // 구조분해 할당
+
+    if (tokenType !== "Bearer") {
+        return res.status(400).json({
+            success: false,
+            message: "로그인 후 사용하세요.",
+        });
+    }
+
     try {
-        const { email } = req.session;
-        if (email !== undefined) {
-            const userInfo = await User.findOne({ where: { email } });
-            res.locals.userId = userInfo.id;
-            res.locals.nickname = userInfo.nickname;
-            next();
-        } else {
-            res.status(400).json({
-                success: false,
-                message: "로그인이 필요합니다.",
-            });
-        }
+        // 받아온 토큰 값을 검증해서 user에 저장
+        const user = jwt.verify(tokenValue, process.env.JWTKEY);
+
+        // res.loclas로 넘겨줌
+        res.locals.userId = user.userId;
+        res.locals.nickname = user.userNickname;
+        next();
     } catch (error) {
+        console.log(error);
         res.status(400).json({
-            success: false,
-            message: error,
+            errorMessage: "로그인 후 사용하세요.",
         });
+        return;
     }
 };
 
-const loginCheckMiddleware = async (req, res, next) => {
-    try {
-        const { email } = req.session;
-        if (email !== undefined) {
-            return res.status(400).json({
-                success: false,
-                message: "이미 로그인 되어있습니다.",
-            });
-        }
-        next();
-    } catch (error) {
-        res.status(400).josn({
-            success: false,
-            message: error,
-        });
-    }
-};
-
-const logoutCheckMiddleware = async (req, res, next) => {
-    try {
-        const { email } = req.session;
-        if (email === undefined) {
-            return res.status(400).json({
-                success: false,
-                message: "이미 로그아웃 되어있습니다.",
-            });
-        }
-        next();
-    } catch (error) {
-        res.status(400).josn({
-            success: false,
-            message: error,
-        });
-    }
-};
-
-export { authMiddleware, loginCheckMiddleware, logoutCheckMiddleware };
+export { authMiddleware };

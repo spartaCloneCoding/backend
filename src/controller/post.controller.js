@@ -10,11 +10,11 @@ class PostController {
     // 커뮤니티 수정 = postupdate
     // 커뮤니티 삭제 = postdelete
 
-    // 커뮤니티 메인페이지 조회
+    // 커뮤니티 메인페이지 조회 - 작성자 : 김영광
     postview = async (req, res) => {
         try {
             const list = await PostService.postview();
-            
+
             
             if (!list) {
                 return res.status(400).json({
@@ -36,7 +36,7 @@ class PostController {
         }
     };
 
-    // 게시판 상세보기
+    // 게시판 상세보기 - 작성자 : 김영광
     postviewdetail = async (req, res) => {
         try {
             const { postId } = req.params;
@@ -62,7 +62,7 @@ class PostController {
         }
     };
 
-    // 커뮤니티 작성
+    // 커뮤니티 작성 - 작성자 : 김영광
     postcreat = async (req, res) => {
         try {
             const { userId } = res.locals;
@@ -87,7 +87,7 @@ class PostController {
         }
     };
 
-    // 커뮤니티 수정
+    // 커뮤니티 수정 - 작성자 : 김영광
     postupdate = async (req, res) => {
         try {
             const { userId } = res.locals;
@@ -135,7 +135,7 @@ class PostController {
         }
     };
 
-    // 커뮤니티 삭제
+    // 커뮤니티 삭제 - 작성자 : 김영광
     postdelete = async (req, res) => {
         try {
             const { userId } = res.locals;
@@ -167,7 +167,7 @@ class PostController {
         }
     };
 
-    // 좋아요 주석 : 좋아요는 로그인만 하면 누구나 가능
+    // 좋아요 주석 : 좋아요는 로그인만 하면 누구나 가능 - 작성자 : 윤상돈
     postLike = async (req, res, next) => {
         const postId = req.params.postId;
         const userId = res.locals.userId;
@@ -195,7 +195,7 @@ class PostController {
             return next(error);
         }
     };
-
+    // 작성자 : 윤상돈
     postLikeDelete = async (req, res, next) => {
         const postId = req.params.postId;
         const userId = res.locals.userId;
@@ -225,7 +225,7 @@ class PostController {
         }
     };
 
-    // 좋아요 개수 확인 조건 필요없음 0은 0임
+    // 좋아요 개수 확인 조건 필요없음 0은 0임 - 작성자 : 윤상돈
     postLikeNum = async (req, res, next) => {
         const postId = req.params.postId;
 

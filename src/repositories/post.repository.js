@@ -29,21 +29,23 @@ class Postrepositories {
             ],
             attributes: { exclude: ["nickname", "UserId"] },
             order: [["createdAt", "DESC"]],
-
         });
 
         return list;        
     };
 
     postviewdetail = async (postId) => {
-        const post = await Post.findOne({
+        const post = await Post.findAll({
             where: { id: postId },
-            include: [{ model: User, attributes: ["nickname"] }],
+            include: [
+                { model: User, attributes: ["nickname"] },
+                { model: Comment },
+                { model: Like },
+            ],
             attributes: { exclude: ["nickname"] },
-            raw: true,
         });
 
-        return post;
+        return post[0].dataValues;
     };
 
     postcreat = async (title, content, UserId) => {
